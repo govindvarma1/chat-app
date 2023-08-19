@@ -55,7 +55,7 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   }, [arrivalMessage]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef.current?.scrollIntoView();
   }, [messages]);
 
   return (
@@ -74,16 +74,26 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
             <Logout />
           </div>
           <div className="chat-messages">
-            {messages.map((message) => {
+            {messages.map((message, index) => {
               return (
-                <div ref={scrollRef} key={uuidv4()}>
-                  <div
-                    className={`message ${
-                      message.fromSelf ? "sent" : "received"
-                    }`}
-                  >
-                    <div className="content">
-                      <p>{message.message}</p>
+                <div key={uuidv4()}>
+                  <div className="date">
+                    <p>
+                      {(index === 0 ||
+                        message.date !== messages[index - 1].date) &&
+                        message.date}
+                    </p>
+                  </div>
+                  <div ref={scrollRef}>
+                    <div
+                      className={`message ${
+                        message.fromSelf ? "sent" : "received"
+                      }`}
+                    >
+                      <div className="content">
+                        <p>{message.message}</p>
+                        <p className="time">{message.time}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -139,6 +149,18 @@ const Container = styled.div`
         border-radius: 1rem;
       }
     }
+    .date {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      p:not(:empty) {
+        background-color: #997af0;
+        width: fit-content;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        margin: 0.5rem;
+      }
+    }
     .message {
       display: flex;
       align-items: center;
@@ -149,6 +171,12 @@ const Container = styled.div`
         font-size: 1.1rem;
         border-radius: 1rem;
         color: #d1d1d1;
+        display: flex;
+        align-items: flex-end;
+        gap: 0.6rem;
+        .time {
+          font-size: 0.65rem;
+        }
       }
     }
     .sent {

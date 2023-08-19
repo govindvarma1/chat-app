@@ -27,9 +27,14 @@ module.exports.getAllMessages = async (req, res, next) => {
             }
         }).sort({ updatedAt: 1 });
         const projectedMessages = messages.map((msg) => {
+            const t = new Date(msg.createdAt);
+            let time = t.getHours() + ":" + t.getMinutes();
+            let date = t.getDate() + "/" + (t.getMonth() + 1) + "/" + t.getFullYear();
             return {
                 fromSelf: msg.sender.toString() === from,
                 message: msg.message.text,
+                time: time,
+                date: date
             }
         })
         res.json(projectedMessages);
