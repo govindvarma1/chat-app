@@ -50,16 +50,16 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
   }
 
   useEffect(() => {
+    const currentDate = new Date();
+    const date =
+      currentDate.getDate() +
+      "/" +
+      (currentDate.getMonth() + 1) +
+      "/" +
+      currentDate.getFullYear();
+    const time = currentDate.getHours() + ":" + currentDate.getMinutes();
     if (socket.current) {
       socket.current.on("msg-receive", (msg) => {
-        const currentDate = new Date();
-        const date =
-          currentDate.getDate() +
-          "/" +
-          (currentDate.getMonth() + 1) +
-          "/" +
-          currentDate.getFullYear();
-        const time = currentDate.getHours() + ":" + currentDate.getMinutes();
         console.log(date);
         setArrivalMessage({
           fromSelf: false,
