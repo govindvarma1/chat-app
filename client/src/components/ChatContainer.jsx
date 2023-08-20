@@ -37,15 +37,36 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
       message: msg,
     });
     const msgs = [...messages];
-    msgs.push({ fromSelf: true, message: msg });
+    const currentDate = new Date();
+    const date =
+      currentDate.getDate() +
+      "/" +
+      (currentDate.getMonth() + 1) +
+      "/" +
+      currentDate.getFullYear();
+    const time = currentDate.getHours() + ":" + currentDate.getMinutes();
+    msgs.push({ fromSelf: true, message: msg, date: date, time: time });
     setMessages(msgs);
   }
 
   useEffect(() => {
     if (socket.current) {
       socket.current.on("msg-receive", (msg) => {
-        console.log(msg);
-        setArrivalMessage({ fromSelf: false, message: msg });
+        const currentDate = new Date();
+        const date =
+          currentDate.getDate() +
+          "/" +
+          (currentDate.getMonth() + 1) +
+          "/" +
+          currentDate.getFullYear();
+        const time = currentDate.getHours() + ":" + currentDate.getMinutes();
+        console.log(date);
+        setArrivalMessage({
+          fromSelf: false,
+          message: msg,
+          date: date,
+          time: time,
+        });
       });
     }
   }, []);
