@@ -5,11 +5,14 @@ import ChatInput from "./ChatInput";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { getAllMessagesRoute, sendMessageRoute } from "../utils/APIRoutes";
+import useSound from "use-sound";
+import sound1 from "../assets/notifications/diff_chat.mp3";
 
 export default function ChatContainer({ currentChat, currentUser, socket }) {
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const scrollRef = useRef();
+  const [diff_chat] = useSound(sound1);
 
   async function getMessages() {
     if (currentChat) {
@@ -59,14 +62,16 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
       currentDate.getFullYear();
     const time = currentDate.getHours() + ":" + currentDate.getMinutes();
     if (socket.current) {
-      socket.current.on("msg-receive", (msg) => {
-        console.log(date);
-        setArrivalMessage({
-          fromSelf: false,
-          message: msg,
-          date: date,
-          time: time,
-        });
+      socket.current.on("msg-receive", ({ message, to }) => {
+        if (currentChat._id === to) {
+          setArrivalMessage({
+            fromSelf: false,
+            message: message,
+            date: date,
+            time: time,
+          });
+        }
+        diff_chat();
       });
     }
   }, []);
