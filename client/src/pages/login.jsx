@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { loginRoutes } from "../utils/APIRoutes";
+import { googleSignInRoute, loginRoutes } from "../utils/APIRoutes";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Register() {
@@ -22,7 +22,7 @@ export default function Register() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("chat-ap-user")) {
+    if (localStorage.getItem("chat-app-user")) {
       navigate("/");
     }
   }, []);
@@ -59,6 +59,10 @@ export default function Register() {
     return true;
   }
 
+  function googleAuth() {
+    window.open(googleSignInRoute, "self");
+  }
+
   return (
     <>
       <FormContainer>
@@ -78,7 +82,17 @@ export default function Register() {
             onChange={handleChange}
             value={user.password}
           />
-          <button type="submit">Login</button>
+          <button className="login" type="submit">
+            Login
+          </button>
+          <hr />
+          <button className="google-button" onClick={googleAuth}>
+            <img
+              src="https://static.vecteezy.com/system/resources/previews/012/871/371/original/google-search-icon-google-product-illustration-free-png.png"
+              alt="google icon"
+            />
+            <span>sign in with google</span>
+          </button>
           <span>
             Don't have an account ? <Link to="/register">register</Link>
           </span>
@@ -121,7 +135,7 @@ const FormContainer = styled.div`
         outline: none;
       }
     }
-    button {
+    .login {
       background-color: #997af0;
       padding: 1rem 2rem;
       border: none;
@@ -143,6 +157,28 @@ const FormContainer = styled.div`
         color: #4e0eff;
         font-weight: bold;
         text-decoration: none;
+      }
+    }
+    hr {
+      width: 100%;
+      border: 0.5px solid #131324;
+    }
+    .google-button {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+      width: 100%;
+      background-color: #131324;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      img {
+        width: 2rem;
+      }
+      span {
+        font-weight: 600;
       }
     }
   }

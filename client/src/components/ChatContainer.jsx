@@ -63,15 +63,14 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     const time = currentDate.getHours() + ":" + currentDate.getMinutes();
     if (socket.current) {
       socket.current.on("msg-receive", ({ message, to }) => {
-        if (currentChat._id === to) {
-          setArrivalMessage({
-            fromSelf: false,
-            message: message,
-            date: date,
-            time: time,
-          });
-        }
-        diff_chat();
+        // if (currentChat._id === to) {
+        setArrivalMessage({
+          fromSelf: false,
+          message: message,
+          date: date,
+          time: time,
+        });
+        // }
       });
     }
   }, []);
